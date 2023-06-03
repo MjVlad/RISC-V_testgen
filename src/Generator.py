@@ -63,7 +63,7 @@ class Generator:
                 continue
             if line.get_opcode() == 'SW':
                 out_str += self.gen_la().get_line() + '\n'
-                line.change_last_op('ra')
+                line.change_last_op('0(ra)')
                 i += 1
             out_str += line.get_line() + '\n'
             i += 1
