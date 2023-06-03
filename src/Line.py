@@ -22,6 +22,13 @@ class Line:
         else:
             self.__ops += ', ' + operand
 
+    def change_last_op(self, operand):
+        ins = [pos for pos, char in enumerate(self.__ops) if char == ',']
+        if ins[-1] != -1:
+            self.__ops = self.__ops[0:ins[-1]]
+        self.set_operand(operand)
+
+
     def get_opcode(self):
         return self.__opcode
 

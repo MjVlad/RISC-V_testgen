@@ -11,7 +11,7 @@ class Opcodes:
         ArithmeticOpcodes(),
         LoadOpcodes(),
         LogicalOpcodes(),
-        MiscellaneousOpcodes()#,
-        # ShiftingOpcodes()#,
-        #StoreOpcodes()
+        MiscellaneousOpcodes(),
+        ShiftingOpcodes(),
+        StoreOpcodes()
     ]

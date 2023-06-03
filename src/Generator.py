@@ -25,13 +25,20 @@ class Generator:
     def chose_mem(self):  # TODO сделать учитывание размера ячейки
         return self.memory.memory[random.randint(0, len(self.memory.memory) - 1)]
 
+    def gen_la(self):
+        line = Line()
+        line.set_opcode('LA')
+        line.set_operand('ra')
+        line.set_operand(self.chose_mem().name)
+        return line
+
     def gen_instruction(self):  # TODO использовать метки
         line = Line()
         opcode = self.chose_opcode()
         line.set_opcode(opcode.text)
         for i, op in enumerate(opcode.ops):
             if op == Operand.IMMEDIATE:
-                line.set_operand(str(random.randint(-2048, 2047)))  # TODO учитывать размер immediate
+                line.set_operand(str(random.randint(opcode.im_left, opcode.im_right)))  # TODO учитывать размер immediate
             if op == Operand.REGISTER:
                 reg = self.chose_reg()
                 if (opcode.in_type == 'I' or opcode.in_type == 'R' or opcode.in_type == 'U') and i == 0:
@@ -54,6 +61,10 @@ class Generator:
             line = self.gen_instruction()
             if line.get_opcode() == 'NOP':
                 continue
+            if line.get_opcode() == 'SW':
+                out_str += self.gen_la().get_line() + '\n'
+                line.change_last_op('ra')
+                i += 1
             out_str += line.get_line() + '\n'
             i += 1
         return out_str
@@ -74,6 +85,7 @@ class Generator:
         mem_offset = 4
         for i in range(2, 32):
             out += f'\tsw x{i}, {mem_offset}(x1)\n'
+            mem_offset += 4
         return out
 
     def gen_output_data(self):
